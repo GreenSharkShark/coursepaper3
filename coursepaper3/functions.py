@@ -16,6 +16,14 @@ def find_last_five(content):
     "находит все строки с датами и форматирует из чтобы можно было работать с ними с помощью библиотеки"
     dat = []
     for i in content:
-        dat.append(str(i.get('date'))[:10] + ' ' + str(i.get('date'))[11:19])
-    return dat
+        dat.append(i['date'][:10] + ' ' + i['date'][11:19])
+    sorted_date = sorted(dat)
+    last_five_operations = []
+    a = -1
+    for i in content:
+        while a > -5:
+            if i['date'][:10] == sorted_date[a][:10] and i['date'][11:19] == sorted_date[a][11:19] and i['state'] == 'EXECUTED':
+                 last_five_operations.append(i)
+                 a -= 1
 
+    return last_five_operations
