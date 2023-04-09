@@ -17,13 +17,15 @@ def find_last_five(content):
     dat = []
     for i in content:
         dat.append(i['date'][:10] + ' ' + i['date'][11:19])
-    sorted_date = sorted(dat)
-    last_five_operations = []
-    a = -1
-    for i in content:
-        while a > -5:
-            if i['date'][:10] == sorted_date[a][:10] and i['date'][11:19] == sorted_date[a][11:19] and i['state'] == 'EXECUTED':
-                 last_five_operations.append(i)
-                 a -= 1
+    sorted_date = sorted(dat, reverse=True)
 
+    last_five_operations = []
+    counter = 0
+    for a in range(len(sorted_date)):
+        for i in content:
+            if counter >= 5:
+                break
+            if datetime.fromisoformat(i['date'][:10] + ' ' + i['date'][11:19]) == datetime.fromisoformat(sorted_date[a]) and i['state'] == 'EXECUTED':
+                last_five_operations.append(i)
+                counter += 1
     return last_five_operations
