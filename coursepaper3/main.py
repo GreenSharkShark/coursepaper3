@@ -1,8 +1,12 @@
 from functions import *
 
+def main():
+    content = get_json()
 
-content = get_json()
+    dat = find_last_five(content)
+    last_five = show_last_five(dat)
+    for i in last_five:
+        print(i + '\n')
 
-dat = find_last_five(content)
-for i in dat:
-    print(i)
+if __name__ == "__main__":
+    main()
