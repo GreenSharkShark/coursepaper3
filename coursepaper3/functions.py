@@ -14,11 +14,11 @@ def get_json():
 
 def find_last_five(content):
     """
-    Возвразает список из последих пяти операций. Номер карты и счета маскиерует.
-    :param content: содержимое json файла с операциями
+    Возвращает список из последних пяти операций. Номер карты и счета маскирует.
+    :param content:Содержимое json файла с операциями
     :return: list
     """
-    # получаем список дат и сортируем в зронолигическом порядке для дальнейшего поиска пяти последних операций
+    # получаем список дат и сортируем в хронологическом порядке для дальнейшего поиска пяти последних операций
     dat = []
     for i in content:
         dat.append(i['date'][:10] + ' ' + i['date'][11:19])
@@ -31,10 +31,9 @@ def find_last_five(content):
         for i in content:
             if counter >= 5:
                 break
-            if datetime.fromisoformat(i['date'][:10] + ' ' + i['date'][11:19]) == datetime.fromisoformat(sorted_date[a]) and i['state'] == 'EXECUTED':
+            if i['date'][:10] + ' ' + i['date'][11:19] == sorted_date[a] and i['state'] == 'EXECUTED':
                 last_five_operations.append(i)
                 counter += 1
-
     # с помощью вложенного цикла маскируем номера карт и счетов
     for i in last_five_operations:
         for key, value in i.items():
@@ -45,14 +44,16 @@ def find_last_five(content):
 
     return last_five_operations
 
-def show_last_five(operations_list):
+
+def show_last_five(last_five_operations):
     """
-    Возвращает список с информащией о опследних пяти операциях в отредактированном формате.
-    :param operations_list:
-    :return: str
+    Возвращает список с информацией о последних пяти операциях в отредактированном формате.
+    :param last_five_operations:
+    :return: Str
     """
     result_list = []
-    for i in operations_list:
+
+    for i in last_five_operations:
         if 'from' in i.keys():
             result = f"{datetime.fromisoformat(i['date'][:10] + ' ' + i['date'][11:19])} {i['description']}\n" \
                      f"{i['from']} -> {i['to']}\n" \
@@ -63,4 +64,5 @@ def show_last_five(operations_list):
                      f"{i['to']}\n" \
                      f"{i['operationAmount']['amount']} {i['operationAmount']['currency']['name']}"
             result_list.append(result)
+
     return result_list
